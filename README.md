@@ -4,10 +4,10 @@ Yet enother postgres install scripts set.
 There is bash scripts tested on RHEL 6 only.
 If you use other Linux Distro, something should not works
 # Dependencies and auxilary tools
-*libevent* requeried by tmux and pgbouncer
-*tmux* IMHO best console terminal multiplexer
-*pgbouncer* Lightweight connection pooler for PostgreSQL
-*lsyncd* inotify syncing daemon
+* _libevent_ requeried by _tmux_ and _pgbouncer_
+* _tmux_ IMHO best console terminal multiplexer
+* _pgbouncer_ Lightweight connection pooler for PostgreSQL
+* _lsyncd_ inotify syncing daemon
 # Install order
 * libevent
 * tmux
