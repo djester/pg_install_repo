@@ -7,7 +7,7 @@ mkdir -p /opt/src && cd /opt/src
 [ -d /opt/libevent ] || ( echo "ERROR: libevent must install before!!!"; exit 1 ) 
 pgb_ver=1.7
 pgb_name=pgbouncer-$pgb_ver
-pgb_nametar=$pgb_name.tar.gz
+pgb_nametar=${pgb_name}.tar.gz
 if [ ! -f $pgb_nametar ]; then
     wget -c https://pgbouncer.github.io/downloads/files/$pgb_ver/$pgb_nametar || exit 1
 fi
