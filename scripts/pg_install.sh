@@ -8,27 +8,27 @@
 #
 ###############################################################################################################
 
-. ./config/pg_install.conf
+. ../config/pg_install.conf
 
 echo "Install PostgreSQL $PG_VER"
 echo "Press ENTER to start..."
 read -s -n 1
 
-mkdir -p /opt/src && cd /opt/src
+mkdir -p /opt/src && cd /opt/src || exit 1
  
-yum install -y readline-devel libxml2-devel libxslt-devel
+yum install -y readline-devel libxml2-devel libxslt-devel || exit 1
  
 pg_name=postgresql-$PG_VER
 pg_nametar=$pg_name.tar.gz
 if [ ! -f $pg_nametar ]; then
-    wget -c https://ftp.postgresql.org/pub/source/v${PG_VER}/postgresql-${PG_VER}.tar.gz
+    wget -c https://ftp.postgresql.org/pub/source/v${PG_VER}/postgresql-${PG_VER}.tar.gz || exit 1
 fi
 tar -zxf $pg_nametar && 
 (
 cd $pg_name &&
 ./configure --prefix=/opt/$pg_name with_libxml=yes with_libxslt=yes && make world -j6 && [ `id -un` = "root" ] && make install-world || sudo make install-world
 ln -s $pg_name /opt/postgresql
-)
+) || exit 1
 
 ###############################################################################################################
 
@@ -38,7 +38,7 @@ read -s -n 1
 # Create group with system GUID
 groupadd -r postgres
 # Create user with system UID and with home directory
-useradd -r -g postgres -s /bin/bash -d $PG_HOME/postgres -m -k /etc/skel postgres
+useradd -r -g postgres -s /bin/bash -d $PG_HOME/postgres -m -k /etc/skel postgres || exit 1
 mkdir -p $PGDATA $PGLOG $PGARCH $PGWAL
 chown -R postgres:postgres $PGDATA $PGLOG $PGWAL
 chmod 0700 $PGDATA
@@ -50,6 +50,7 @@ echo "Press ENTER to start..."
 read -s -n 1
 
 cr_db_cmd="/opt/postgresql/bin/initdb -D ${PGDATA} -E ${PG_ENCODING} --locale=${PG_LC} --lc-collate=${PG_LC} --lc-ctype=${PG_LC}"
-su postgres -c ${cr_db_cmd}
+su postgres -c ${cr_db_cmd} || exit 1
 
+exit 0
 
