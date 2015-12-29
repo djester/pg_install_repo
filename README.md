@@ -30,3 +30,20 @@ For installation you can use __pg_run_install.sh__ script.
 I recommend to install __libevent__ and __tmux__ first.
 After it other software could be installed from __tmux__.
 Now scripts for install each component locate at __scripts__ directory
+
+# Multiple instance
+If you need multiple instance of PostgreSQL Cluster in same host (probably for testing purpose), you should create softlink to /etc/init.d/postgresql like postgresql.servername
+Don't forget copy postgresql script from pg_install_repo/init.d before. Configure your server with command 
+```
+mkdir -p /etc/sysconfig/pgsql/
+
+cat > /etc/sysconfig/pgsql/postgresql.servername <<EOF
+PGDATA=/data/pgsql/9.4/
+PGPORT=5432
+PGLOG=/data/log/pgsql/pgstartup.servername.log
+PGENGINE=/opt/postgresql/bin
+EOF
+
+ln -s /etc/init.d/postgresql /etc/init.d/postgresql.servername
+
+```
