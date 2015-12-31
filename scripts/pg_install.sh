@@ -32,6 +32,12 @@ cd $pg_name &&
 ln -s $pg_name /opt/postgresql
 ) || exit 1
 
+# set PATH to profile enviroment
+cat > /etc/profile.d/postgresql.sh <<EOF
+export PATH=\$PATH:/opt/postgresql/bin
+export MANPATH=\$MANPATH:/opt/postgresql/share/man
+EOF
+
 ###############################################################################################################
 
 echo "Create user postgres with credentials"
