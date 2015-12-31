@@ -15,7 +15,9 @@ echo "Press ENTER to start..."
 read -s -n 1
 
 mkdir -p /opt/src && cd /opt/src || exit 1
- 
+# remove installed from rpm (if exists)
+yum -y remove postgresql-libs postgresql postgresql-odbc 
+# install dependencies
 yum install -y readline-devel libxml2-devel libxslt-devel || exit 1
  
 pg_name=postgresql-$PG_VER
