@@ -1,0 +1,24 @@
+settings {
+    logfile = "/var/log/lsyncd/lsyncd.log",
+    statusFile = "/var/log/lsyncd-status.log",
+    nodaemon  = false,
+    statusInterval = 20
+}
+
+sync {
+   default.rsync,
+   source="@@arch_dir@@",
+   target="@@slave_host@@:@@wal_dir@@",
+   rsync = {
+     binary     = "/usr/bin/rsync",
+     rsh        = "/usr/bin/ssh -l postgres -i /data/home/postgres/.ssh/id_rsa -o StrictHostKeyChecking=no",
+     archive    = true,
+     compress   = false,
+     owner      = true,
+     perms      = true,
+     whole_file = false,
+     checksum   = true
+   },
+   delete     = true
+}
+
