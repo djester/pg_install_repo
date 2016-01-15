@@ -1,0 +1,10 @@
+/var/log/lsyncd/*log {
+    missingok
+    notifempty
+    sharedscripts
+    postrotate
+    if [ -f /var/lock/lsyncd ]; then
+      /etc/init.d/lsyncd restart > /dev/null 2>/dev/null || true
+    fi
+    endscript
+}
