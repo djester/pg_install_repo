@@ -18,7 +18,7 @@
 RETVAL=0
 PIDFILE="/var/run/lsyncd.pid"
 LOCKFILE="/var/lock/subsys/lsyncd"
-LSYNCD="/usr/local/bin/lsyncd"
+LSYNCD="/opt/lsyncd/usr/local/bin/lsyncd"
 CONFIG="/etc/lsyncd.conf"
 PROG="lsyncd"
 
