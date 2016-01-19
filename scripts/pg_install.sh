@@ -8,7 +8,7 @@
 #
 ###############################################################################################################
 
-. ../config/pg_install.conf
+#. ../config/pg_install.conf
 
 echo "Install PostgreSQL $PG_VER"
 echo "Press ENTER to start..."
@@ -58,7 +58,7 @@ echo "Press ENTER to start..."
 read -s -n 1
 
 cr_db_cmd="/opt/postgresql/bin/initdb -D ${PGDATA} -E ${PG_ENCODING} --locale=${PG_LC} --lc-collate=${PG_LC} --lc-ctype=${PG_LC}"
-su postgres -c ${cr_db_cmd} || exit 1
+su postgres -c "${cr_db_cmd}" || exit 1
 
 exit 0
 

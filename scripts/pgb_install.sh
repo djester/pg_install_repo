@@ -2,7 +2,7 @@
 
 mkdir -p /opt/src && cd /opt/src 
 
-. ../config/pg_install.conf 
+# . ../config/pg_install.conf 
 # libevent must install before
 [ -d /opt/libevent ] || ( echo "ERROR: libevent must install before!!!"; exit 1 ) 
 pgb_ver=1.7
