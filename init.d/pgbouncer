@@ -1,0 +1,63 @@
+#!/bin/sh
+#
+### BEGIN INIT INFO
+# Provides: pgbouncer
+# Required-Start: $local_fs $network
+# Required-Stop: $local_fs $network
+# Should-Start: 
+# Should-Stop: 
+# Default-Start:
+# Default-Stop: 0 1 2 3 4 5 6
+# Short-Description: Start and stop pgbouncer
+# Description: pgbouncer
+### END INIT INFO
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+exec=/opt/pgbouncer/bin/pgbouncer
+params="/data/pgbouncer/pgbouncer.ini"
+lockfile=/var/run/pgbouncer.pid
+prog=${exec##*/}
+
+ulimit -n 16384 65536
+start()
+{
+    echo -n $"Starting pgbouncer: "
+    #daemon --user=pgbouncer $exec -d $params
+    daemon $exec -u postgres -d $params
+    rv=$?
+    echo
+    [ $rv -eq 0 ] && touch $lockfile
+    return $rv
+}
+
+stop()
+{
+    echo -n $"Shutting down pgbouncer: "
+    killproc $prog
+    rv=$?
+    echo
+    [ $rv -eq 0 ] && rm -f $lockfile
+    return $rv
+}
+
+restart()
+{
+    stop
+    start
+}
+
+case "$1" in
+    start|stop|restart)
+        $1
+        ;;
+    status)
+        status $prog
+        ;;
+    *)
+    echo $"Usage: $0 {start|stop|restart}"
+    exit 2
+    ;;
+esac
+
