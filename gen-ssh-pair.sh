@@ -12,9 +12,7 @@ echo "echo ${PG_PWD} | passwd --stdin postgres"
 echo "Press ENTER to continue..."
 read -s -n 1
 
-[ -f ${SSH_KEY_FILE} ] && ( rm -f ${SSH_KEY_FILE} ; rm -f ${SSH_KEY_FILE}.pub )
-
-su - postgres -c "ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa" || exit 1
+[ -f ${SSH_KEY_FILE} ] || ( su - postgres -c "ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa" || exit 1 )
 
 echo "Run from postgres on this host:"
 echo "ssh-copy-id postgres@${PAIR_HOST}"
