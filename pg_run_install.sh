@@ -16,5 +16,5 @@ export repo
 
 # install scripts
 
-${repo}/scripts/libevent_install.sh && ${repo}/scripts/tmux_install.sh && . /etc/profile.d/tmux.sh && ${repo}/scripts/pg_install.sh && . /etc/profile.d/postgresql.sh && ${repo}/scripts/pgb_install.sh && ${repo}/scripts/lsyncd_install.sh
+${repo}/scripts/libevent_install.sh && ${repo}/scripts/tmux_install.sh && . /etc/profile.d/tmux.sh && ${repo}/scripts/pg_install.sh && ${repo}/scripts/pg_user_create.sh && ${repo}/scripts/pg_db_init.sh && . /etc/profile.d/postgresql.sh && ${repo}/scripts/pgb_install.sh && ${repo}/scripts/lsyncd_install.sh
 
