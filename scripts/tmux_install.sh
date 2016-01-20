@@ -24,7 +24,7 @@ tar zxf ${tmux_nametar} &&
 # Configuration file
 cat > /etc/profile.d/tmux.sh <<EOF
 export PATH=\$PATH:/opt/tmux/bin
-export MANPATH=\$MANPATH:/opt/tmux/share/man:
+export MANPATH=\$MANPATH:/opt/tmux/share/man
 EOF
 
 exit 0
