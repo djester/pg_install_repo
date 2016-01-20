@@ -17,7 +17,7 @@ cd $pgb_name &&
  ./configure --prefix=/opt/$pgb_name --with-libevent=/opt/libevent && make && ( [ `id -un` = "root" ] && make install || sudo make install ) && ln -s /opt/$pgb_name /opt/pgbouncer 
 ) || exit 1
 
-useradd -r -g postgres -s /bin/bash -d $PG_HOME -m pgbouncer || exit 1
+useradd -r -g postgres -s /bin/bash -d $PG_HOME/pgbouncer -m -k /etc/skel pgbouncer || exit 1
 mkdir /data/pgbouncer /var/run/pgbouncer
 chown -R pgbouncer /var/run/pgbouncer
 
