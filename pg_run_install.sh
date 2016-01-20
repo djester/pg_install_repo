@@ -4,17 +4,23 @@
 # Be carreful!!! libevent is dependency for tmux and pgbouncer
 #
 
-# includes
+# set root for git repository
 
 repo=$(readlink -f $0); repo=${repo%/*}
 export repo
 
+# includes
+
 . ${repo}/config/libevent_install.conf
 . ${repo}/config/pg_install.conf
 
-#./scripts/libevent_install.sh
-#./scripts/tmux_install.sh
-#./scripts/pg_install.sh
-./scripts/pgb_install.sh
-./scripts/lsyncd_install.sh
+# install scripts
+
+${repo}/scripts/libevent_install.sh
+${repo}/scripts/tmux_install.sh
+. /etc/profile.d/tmux.sh
+${repo}/scripts/pg_install.sh
+. /etc/profile.d/postgresql.sh
+${repo}/scripts/pgb_install.sh
+${repo}/scripts/lsyncd_install.sh
 
