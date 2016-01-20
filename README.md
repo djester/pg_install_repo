@@ -28,7 +28,7 @@ You should change it for your configuration
 # Installation
 For installation you can use __pg_run_install.sh__ script.
 I recommend to install __libevent__ and __tmux__ first.
-After it other software could be installed from __PostgreSQL__.
+After it other software could be installed from __tmux__.
 Now scripts for install each component locate at __scripts__ directory
 
 # Multiple instance
