@@ -7,8 +7,17 @@ PG_PWD=$(date +%s | sha256sum | base64 | head -c 32)
 echo "Run from root on ${PAIR_HOST} host:"
 echo "echo ${PG_PWD} | passwd --stdin postgres"
 
+echo "Press ENTER to continue..."
+read -s -n 1
+
 [ -f ${SSH_KEY_FILE} ] && ( rm -f ${SSH_KEY_FILE} ; rm -f ${SSH_KEY_FILE}.pub )
 
 su - postgres -c "ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa"
-su - postgres -c "ssh-copy-id postgres@${PAIR_HOST}"
+
+echo "Run from postgres on this host:"
+echo "ssh-copy-id postgres@${PAIR_HOST}"
+echo "${PG_PWD} password"
+
+echo "Press ENTER to continue..."
+read -s -n 1
 
