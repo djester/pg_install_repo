@@ -10,7 +10,7 @@ yum -y install ncurses-devel || exit1
 #Install
 cd /opt/src
 
-tmux_ver=2.1
+tmux_ver=2.2
 tmux_name=tmux-$tmux_ver
 tmux_nametar=${tmux_name}.tar.gz
 if [ ! -f $tmux_nametar ]; then
