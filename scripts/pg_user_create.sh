@@ -7,15 +7,15 @@ echo "Create group & user postgres"
 
 
 if id postgres >/dev/null 2>&1; then
+    # Set primary user group
+    
+    usermod -g postgres postgres || exit 1
+
+else
     # Create user with system UID and with home directory
 
     [ -d $PG_HOME ] || mkdir -p $PG_HOME || exit 1
     useradd -r -g postgres -s /bin/bash -d $PG_HOME/postgres -m -k /etc/skel postgres || exit 1
-
-else
-    # Set primary user group
-    
-    usermod -g postgres postgres || exit 1
 
 fi
 
