@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cp $1 /data/pgwal/$2
+
+if [ ${2##*.} != "backup" ]
+then
+  ln /data/pgwal/$2 /data/pgwal/walbackup/$2
+  ln /data/pgwal/$2 /data/pgwal/archive/$2
+fi
+
+

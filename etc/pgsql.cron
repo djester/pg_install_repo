@@ -1,0 +1,5 @@
+*       *       *       *       *              /usr/bin/pgrep -f 'postgres: autovacuum' | xargs --no-run-if-empty -I $ renice -n 20 -p $ >/dev/null 2>/dev/null
+*       *       *       *       *              /usr/bin/pgrep -f 'postgres: autovacuum' | xargs --no-run-if-empty -I $ ionice -c 3 -t -p $ 
+#postgres
+10      2       *       *       *              /data/bin/wal_clean2 >/dev/null 2>&1
+

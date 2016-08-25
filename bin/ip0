@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Virtual IP: pgsql-vega0.rian.off
+IP_0="10.24.12.90"
+IP_0_DEV=bond0
+
+#----stop modifying here
+
+case $1 in
+  down)
+	ip ad del ${IP_0}/16 dev $IP_0_DEV
+	#  echo "down"
+	;;
+  up)
+	if [ "$2" = "f" ]; then
+		ip ad add ${IP_0}/16 dev $IP_0_DEV
+	else
+		ping -c1 ${IP_0} >/dev/null 2>&1
+		if [ "$?" -eq 0 ] ; then
+                        echo "error: ip address [$IP_0] is already in use. skip."
+			exit 2
+		else
+			ip ad add ${IP_0}/16 dev $IP_0_DEV
+		fi
+	fi
+	;;
+  show_ip)
+	echo "$IP_0"
+	;;
+  show_dev)
+	echo "$IP_0_DEV"
+	;;
+  *)
+        # Print help
+        echo "Usage: $0 {up|down|show_ip|show_dev} [f]" 1>&2
+        exit 1
+        ;;
+esac
+
+exit 0
+
