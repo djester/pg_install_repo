@@ -1,0 +1,8 @@
+
+standby_mode                = 'on'
+primary_conninfo            = 'host=pgsql-host1.rian.off port=5432 user=replica'
+restore_command             = 'scp postgres@pgsql-host1.rian.off:/data/pgwal/%f %p'
+archive_cleanup_command     = 'ssh postgres@pgsql-host1.rian.off "pg_archivecleanup /data/pgwal %r"'
+
+#primary_slot_name           = 'standby_replication_slot'
+
