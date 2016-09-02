@@ -26,7 +26,7 @@ PGUSER=postgres
 # Where to keep a log file
 PGLOG="/data/log/pgsql/pgstartup.log"
 
-# Virtual IP: pgsql-sirius0.rian.off
+# Virtual IP: pgsql-host0.domain.off
 # must be set two parameters: IP_0 and IP_0_DEV or one parameter IP_0_FILE.
 # if set three parameters, IP_0 and IP_0_DEV has biggest priority.
 IP_0="10.24.8.7"

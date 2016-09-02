@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Virtual IP: pgsql-vega0.rian.off
+# Virtual IP: pgsql-host0.domain.off
 IP_0="10.24.12.90"
 IP_0_DEV=bond0
 
