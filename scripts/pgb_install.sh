@@ -21,10 +21,13 @@ fi
 tar -zxf $pgb_nametar && 
 (
 cd $pgb_name &&
- ./configure --prefix=/opt/$pgb_name --with-libevent=/opt/libevent && make && ( [ `id -un` = "root" ] && make install || sudo make install ) && ln -s /opt/$pgb_name /opt/pgbouncer 
+    ./configure --prefix=/opt/$pgb_name --with-libevent=/opt/libevent && \
+    make && ( [ `id -un` = "root" ] && make install || sudo make install ) && \
+    ( [ -h /opt/pgbouncer ] || ln -s /opt/$pgb_name /opt/pgbouncer )
 ) || exit 1
 
 #create user and set permissions
+[ "$PG_HOME" ] || PG_HOME=/data
 [ -d $PG_HOME ] || mkdir -p $PG_HOME || exit 1
 useradd -r -g postgres -s /bin/bash -d $PG_HOME/pgbouncer -m -k /etc/skel pgbouncer || exit 1
 mkdir /data/pgbouncer /var/run/pgbouncer
