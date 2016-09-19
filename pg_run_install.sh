@@ -22,6 +22,6 @@ ${repo}/scripts/pg_install.sh && \
 ${repo}/scripts/pg_user_create.sh && \
 ${repo}/scripts/pg_db_init.sh && \
  . /etc/profile.d/postgresql.sh && \
-${repo}/scripts/pgb_install.sh && \
+${repo}/scripts/pgb_install.sh 1.7.2 && \
 ${repo}/scripts/lsyncd_install.sh
 
