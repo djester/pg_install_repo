@@ -1,5 +1,8 @@
 #!/bin/bash
 
+PG_VER=${PG_VER:-$1}
+[ "${PG_VER}" ] || { echo "ERR: Varible PG_VER is not defined!" >&2; exit 1; }
+
 echo "Install PostgreSQL $PG_VER"
 
 mkdir -p /opt/src && cd /opt/src || exit 1
