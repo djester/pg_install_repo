@@ -5,7 +5,6 @@ mkdir -p /opt/src
 #Dependences
 yum -y install ncurses-devel || exit1
 
-#. ../config/libevent_install.conf
 
 #Install
 cd /opt/src

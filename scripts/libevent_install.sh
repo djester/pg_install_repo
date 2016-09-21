@@ -8,7 +8,6 @@ cd /opt/src
 
 yum -y remove libevent libevent-devel libevent-headers || exit 1
 
-#. ../config/libevent_install.conf
 
 if [ ! -f $libevent_nametar ]; then
   wget -O ${libevent_nametar} "https://github.com/libevent/libevent/releases/download/release-${libevent_ver_full}/${libevent_nametar}"
