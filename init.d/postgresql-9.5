@@ -1,0 +1,260 @@
+#! /bin/sh
+#
+# chkconfig: 2345 91 61
+#
+### BEGIN INIT INFO
+# Provides:       postgresql
+# Required-Start: $network $remote_fs
+# Required-Stop:
+# Default-Start:  2345
+# Default-Stop:   0
+# Description:    Start the PostgreSQL master daemon
+### END INIT INFO
+
+# Source function library.
+. /etc/init.d/functions
+
+# Installation prefix
+prefix=/opt/postgresql
+
+# Data directory
+PGDATA="/data/pgsql/9.5"
+
+# Who to run the postmaster as, usually "postgres".  (NOT "root")
+PGUSER=postgres
+
+# Where to keep a log file
+PGLOG="/data/log/pgsql/pgstartup.log"
+
+# Virtual IP: pgsql-host0.domain
+# must be set two parameters: IP_0 and IP_0_DEV or one parameter IP_0_FILE.
+# if set three parameters, IP_0 and IP_0_DEV has biggest priority.
+IP_0="10.24.8.7"
+IP_0_DEV=bond0
+
+# IP_0_FILE must have following arguments: up, down, show_ip
+# and return 0 if successed, 1 if failed, 2 if IP address is already in use.
+#IP_0_FILE=/data/bin/ip0
+
+# template file recovery.conf
+RECOVERY_FILE=/data/pgsql/recovery.conf.tmpl
+
+
+## STOP EDITING HERE
+
+# The path that is to be used for the script
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+# What to use to start up the postmaster (we do NOT use pg_ctl for this,
+# as it adds no value and can cause the postmaster to misrecognize a stale
+# lock file)
+DAEMON="$prefix/bin/postmaster"
+
+# What to use to shut down the postmaster
+PGCTL="$prefix/bin/pg_ctl"
+
+#set -e
+
+
+
+check_pg_status()
+{
+        su - $PGUSER -c "$PGCTL status -D '$PGDATA'" >/dev/null
+}
+
+
+check_ip0_local()
+{
+	ip add | grep -v grep | grep "${IP0}" >/dev/null
+}
+
+
+check_ip0_network()
+{
+        ping -c1 ${IP0} >/dev/null 2>&1
+}
+
+
+ip0() 
+{
+	if [ "$IP_0" ] && [ "$IP_0_DEV" ] ; then
+		if [ "$1" = "down" ]; then
+			ip ad del ${IP_0}/16 dev $IP_0_DEV  >/dev/null 2>&1
+		elif [ "$1" = "up" ]; then
+			ip ad add ${IP_0}/16 dev $IP_0_DEV  >/dev/null 2>&1
+		fi
+	elif [ -x "$IP_0_FILE" ] ; then
+		$IP_0_FILE $1 >/dev/null 2>&1
+		[ "$?" -eq 2 ] && { echo "error: ip address [$IP0] is already in use. exit." ; exit 1; }
+	else
+		echo "Virtual IP/device does not settings. exit."
+		exit 1
+	fi
+	return 0
+}
+
+
+pgstart()
+{
+        if [ "$1" = "standby" ]; then
+
+                echo -n $"Prepare for STANDBY starting: "
+		if [ -f $RECOVERY_FILE ] ; then
+	                su - $PGUSER -c "cp $RECOVERY_FILE $PGDATA/recovery.conf"
+			[ "$?" -eq 0 ] && { echo_success; echo; } || { echo_failure; echo; exit 1; }
+		else
+			echo_failure
+			echo
+			echo "error: file '$RECOVERY_FILE' does not exist. exit."
+			exit 1
+		fi
+		
+		if check_ip0_local ; then
+			echo -n $"Stopping Virtual IP: "
+			ip0 down 
+	              	[ "$?" -eq 0 ] && echo_success || echo_failure
+			echo
+		fi
+
+        elif [ "$1" = "primary" ] ; then
+
+		if ! check_ip0_local ; then
+			# local IP is down, check network...
+			check_ip0_network
+			if [ "$?" -eq 0 ] ; then
+				echo "error: ip0 address [$IP0] is already in use. exit."
+                                exit 1
+			fi
+		fi
+
+                echo -n $"Prepare for PRIMARY starting: "
+		if [ -f "$PGDATA/recovery.conf" ]; then
+			rm $PGDATA/recovery.conf >/dev/null 2>&1
+			[ "$?" -eq 0 ] && echo_success || echo_failure
+		else
+			echo_passed
+		fi
+		echo
+	fi
+
+
+	echo -n $"Starting PostgreSQL "
+
+	if  [ -f $PGDATA/recovery.conf ] ; then
+                echo -n $"(standby): "
+	else
+		# starting as primary
+		echo -n $"(primary): "
+                if ! check_ip0_local ; then
+                        # local IP is down, check network...
+                        if check_ip0_network ; then
+				echo_failure
+				echo
+                                echo "error: ip0 address [$IP0] is already in use. exit."
+                                exit 1
+                        fi
+                fi
+	fi
+
+	if ! check_pg_status ; then
+		#su - $PGUSER -c "$DAEMON -D '$PGDATA' >>$PGLOG 2>&1 &"
+		su - $PGUSER -c "$PGCTL start -D '$PGDATA' -w -s -l $PGLOG"
+#daemon --check ${POSTMASTER} --pidfile ${PID_FILE} --user postgres "${PG_CTL} start -l ${LOG_FILE} -D ${PGDATA} -p ${POSTMASTER} ${PGOPTIONS} > /dev/null"
+	       	RETVAL=$?
+	       	[ "$RETVAL" -eq 0 ] && echo_success || echo_failure
+	else
+		RETVAL=0
+		echo_passed; 
+	fi
+	echo
+
+        if [ "$RETVAL" -eq 0 ] && ! [ -f $PGDATA/recovery.conf ] ; then
+                echo -n $"Starting Virtual IP: "
+       	        if check_ip0_local ; then
+               	        echo_passed
+		else
+       	                ip0 up
+               	        [ "$?" -eq 0 ] && echo_success || echo_failure
+		fi
+		echo
+	fi
+}
+
+
+pgstop()
+{
+#	echo -n $"Stopping Virtual IP: "
+	if check_ip0_local ; then
+		echo -n $"Stopping Virtual IP: "
+		ip0 down
+		[ "$?" -eq 0 ] && echo_success || echo_failure
+#	else
+#		echo_passed
+		echo
+	fi
+#	echo
+
+	echo -n $"Stopping PostgreSQL: "
+	if check_pg_status ; then
+		su - $PGUSER -c "$PGCTL stop -D '$PGDATA' -s -m fast"
+		RETVAL=$?
+		[ "$RETVAL" -eq 0 ] && echo_success || echo_failure
+	else
+		echo_passed
+	fi
+	echo
+}
+
+
+
+# Only start if we can find the postmaster.
+#test -x $DAEMON || { echo "File not found: $DAEMON" >&2; exit 1; }
+test -x $PGCTL || { echo "File not found: $PGCTL" >&2; exit 1; }
+
+
+# exit if not set IP0_FILE or IP_0/IP_0_DEV
+if [ "$IP_0" ] && [ "$IP_0_DEV" ]; then
+	IP0=$IP_0
+elif [ -x $IP0_FILE ]; then
+	IP0=`$IP_0_FILE show_ip`
+else
+	echo "Virtual IP/device or file does not settings. exit."
+	exit 1
+fi
+
+
+
+# Parse command line parameters.
+case $1 in
+  start)
+	pgstart $2;
+	#sleep 3
+	;;
+  stop)
+	pgstop;
+	;;
+  restart)
+	pgstop;
+	pgstart $2;
+	;;
+  reload)
+        echo -n $"Reload PostgreSQL: "
+        su - $PGUSER -c "$PGCTL reload -D '$PGDATA' -s"
+        RETVAL=$?
+        [ "$RETVAL" -eq 0 ] && echo_success || echo_failure
+        echo
+        ;;
+  status)
+	su - $PGUSER -c "$PGCTL status -D '$PGDATA'"
+    	;;
+  *)
+	# Print help
+	echo "Usage: $0 {start|stop|restart|reload|status} [primary|standby]" 1>&2
+	exit 1
+  	;;
+esac
+
+exit $RETVAL
+
+
+
