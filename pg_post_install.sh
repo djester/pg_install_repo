@@ -48,6 +48,9 @@ cp ${repo}/etc/recovery.conf.tmpl ${PGSQL}/recovery.conf.tmpl || exit 1
 echo "-- postgres lsyncd.conf"
 cp ${repo}/etc/lsyncd.conf /etc/lsyncd.conf || exit 1
 
+echo Copy auxilary scripts
+mkdir -p ${PG_BIN} && cp ${repo}/bin/* ${PG_BIN}/
+
 echo Create Postgres entities
 
 echo "-- Create empty DB for monitoring agent connection"
