@@ -36,8 +36,10 @@ echo "-- postgres crontab"
 cp ${repo}/etc/pgsql.cron /var/spool/cron/postgres || exit 1
 echo "-- recovery.conf.tmpl (DON'T FORGET EDIT IT!!!)"
 cp ${repo}/etc/recovery.conf.tmpl ${PGSQL}/recovery.conf.tmpl || exit 1
-echo "-- postgres lsyncd.conf"
+echo "-- lsyncd.conf"
 cp ${repo}/etc/lsyncd.conf /etc/lsyncd.conf || exit 1
+echo "-- pgbouncer.ini"
+cp ${repo}/etc/pgbouncer.ini ${TARGET_DIR}/pgbouncer/pgbouncer.ini && chown -R postgres:postgres /var/run/pgbouncer || exit 1
 
 echo Copy auxilary scripts
 mkdir -p ${PG_BIN} && cp ${repo}/bin/* ${PG_BIN}/
