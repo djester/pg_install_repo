@@ -47,3 +47,17 @@ EOF
 ln -s /etc/init.d/postgresql /etc/init.d/postgresql.servername
 
 ```
+
+# Disable transparent huge pages
+
+```
+cat >> /etc/rc.local <<EOF
+if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
+   echo never > /sys/kernel/mm/transparent_hugepage/enabled
+fi
+if test -f /sys/kernel/mm/transparent_hugepage/defrag; then
+   echo never > /sys/kernel/mm/transparent_hugepage/defrag
+fi
+EOF
+
+```
