@@ -1,0 +1,32 @@
+#!/bin/sh
+
+DBNM=vega
+
+BASE_WAL_DIR=/data/pgwal
+IS_CLEAN_BACKUP_FILES='Y'
+
+ARCHIVE_SRC_DIR=${BASE_WAL_DIR}/archive
+ARCHIVE_DST_DIR=/data/bckp/wal_archive
+ARCHIVE_KEEP_DAYS=7
+
+#----stop modifying here
+
+
+# archive and delete if success
+#
+PREV_DT=`date --date='1 days ago' '+%Y%m%d'`
+
+cd ${ARCHIVE_SRC_DIR}
+find ./ -type f -daystart -mtime +0 -mtime -2 -exec tar --remove-files --xz -cf ${ARCHIVE_DST_DIR}/${DBNM}-wal-${PREV_DT}.tar.xz {} \+
+
+
+# delete oldest WAL archive
+#
+find ${ARCHIVE_DST_DIR} -type f -daystart -mtime +${ARCHIVE_KEEP_DAYS} -delete
+
+
+if [ ${IS_CLEAN_BACKUP_FILES} = 'Y' ] ; then
+  find ${BASE_WAL_DIR} -maxdepth 1 -type f -name '*.backup' -daystart -mtime +0 -mtime -2 -delete
+fi
+
+
