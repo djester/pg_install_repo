@@ -3,7 +3,8 @@ Yet enother PostgreSQL install from sources scripts set.
 Made for personal use, but I making it more powerfull at near time.
 
 # Compatibility
-There is bash scripts tested on RHEL 6 only.
+There is bash scripts should be use on RHEL 6 and 7 only.
+Support systemd added, but not ready for production yet.
 
 If you use other Linux Distro, something should not works
 
