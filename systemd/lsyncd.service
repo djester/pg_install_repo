@@ -1,0 +1,11 @@
+[Unit]
+Description=synchronization daemon
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+PIDFile=/run/lsyncd.pid
+ExecStart=/usr/bin/lsyncd -pidfile /run/lsyncd.pid /etc/lsyncd/lsyncd.conf.lua
+
+[Install]
+WantedBy=multi-user.target

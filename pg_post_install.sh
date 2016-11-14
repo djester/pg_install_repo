@@ -15,12 +15,28 @@ export repo
 
 echo Copy init-scripts:
 
-echo -- PostgreSQL
-cp ${repo}/init.d/postgresql-${PG_REL} /etc/init.d/postgresql && chkconfig postgresql on || exit 1
-echo -- lsyncd
-cp ${repo}/init.d/lsyncd /etc/init.d/lsyncd && chkconfig lsyncd on || exit 1
-echo -- pgbouncer
-cp ${repo}/init.d/pgbouncer /etc/init.d/pgbouncer && chkconfig pgbouncer on || exit 1
+${repo}/tools/getinit.sh
+
+if [[ $SYSTEMINITDAEMON == "systemd" ]]; then
+  echo -- PostgreSQL
+  cp -f ${repo}/systemd/postgresql.service /usr/lib/systemd/system/postgresql.service && \
+  mkdir -p /etc/systemd/logind.conf.d && \
+  cp -f ${repo}/systemd/postgresql.logind.conf /etc/systemd/logind.conf.d/postgres && \
+  systemctl enable postgresql || exit 1
+  echo -- lsyncd
+  cp -f ${repo}/systemd/lsyncd.service /usr/lib/systemd/system/lsyncd.service && \
+  systemctl enable lsyncd || exit 1
+  echo -- pgbouncer
+  cp -f ${repo}/systemd/pgbouncer.service /usr/lib/systemd/system/pgbouncer.service && \
+  systemctl enable pgbouncer || exit 1
+else
+  echo -- PostgreSQL
+  cp ${repo}/init.d/postgresql-${PG_REL} /etc/init.d/postgresql && chkconfig postgresql on || exit 1
+  echo -- lsyncd
+  cp ${repo}/init.d/lsyncd /etc/init.d/lsyncd && chkconfig lsyncd on || exit 1
+  echo -- pgbouncer
+  cp ${repo}/init.d/pgbouncer /etc/init.d/pgbouncer && chkconfig pgbouncer on || exit 1
+fi
 
 echo Copy configs
 
