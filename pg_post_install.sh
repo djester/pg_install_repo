@@ -41,7 +41,12 @@ fi
 echo Copy configs
 
 echo "-- sysctl.conf (DON'T FORGET EDIT IT!!!)"
-cp ${repo}/etc/sysctl.conf /etc/sysctl.conf && sysctl -p || exit 1
+if [ $(uname -r | cut -c 1) -gt 2 ];
+then
+  sed 's/sched_migration_cost/sched_migration_cost_ns/g' ${repo}/etc/sysctl.conf > /etc/sysctl.conf && sysctl -p || exit 1
+else
+  cp ${repo}/etc/sysctl.conf /etc/sysctl.conf && sysctl -p || exit 1
+fi
 echo "-- limits.conf"
 cp ${repo}/etc/limits.conf /etc/security/limits.conf || exit 1
 echo "-- pg_hba.conf (DON'T FORGET EDIT IT!!!)"
