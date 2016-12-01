@@ -21,6 +21,10 @@ If you use other Linux Distro, something should not works
 4. __pgbouncer__ - if you want pooling for your connections
 5. __lsyncd__ - if you have single node (without replication) you not need it
 
+# Post-install tasks
+1. Run pg_copy_conf.sh for deploy configuration
+2. On master server run pg_create_entities.sh
+
 # Configuration
 __config__ diriectory includes files with customizeble variables.
 
