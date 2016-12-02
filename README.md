@@ -23,7 +23,9 @@ If you use other Linux Distro, something should not works
 
 # Post-install tasks
 1. Run pg_copy_conf.sh for deploy configuration
-2. On master server run pg_create_entities.sh
+2. Edit configuration files
+3. Start PostgreSQL using your init system. Check run state.
+4. On master server run pg_create_entities.sh
 
 # Configuration
 __config__ diriectory includes files with customizeble variables.
