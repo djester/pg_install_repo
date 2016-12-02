@@ -6,7 +6,7 @@
 
 # set root for git repository
 
-repo=$(readlink -f $0); repo=${repo%/*}
+repo=$(readlink -f $0); repo=${repo%/post_install*}
 export repo
 
 # includes
