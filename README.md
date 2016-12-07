@@ -68,3 +68,9 @@ fi
 EOF
 
 ```
+
+# Create DB copy for standby
+```
+pg_basebackup -D ${PGDATA} -x -P -h ${PG_MASTER_HOST} -U replica
+```
+
