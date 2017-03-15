@@ -11,7 +11,6 @@ export repo
 
 # includes
 
-. ${repo}/config/libevent_install.conf
 . ${repo}/config/pg_install.conf
 
 # install scripts
