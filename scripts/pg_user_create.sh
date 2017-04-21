@@ -1,5 +1,13 @@
 #!/bin/bash
 
+TARGET_DIR  = ${TARGET_DIR:-$1}
+PG_REL      = ${PG_REL:-$2}
+PGDATA      = ${TARGET_DIR}/pgsql/${PG_REL}
+PGLOG       = ${TARGET_DIR}/log/pgsql
+PGWAL       = ${TARGET_DIR}/pgwal
+PGARCH      = ${PGWAL}/archive
+PGWALBACKUP = ${PGWAL}/walbackup
+
 echo "Create group & user postgres"
 
 # Create group with system GUID
