@@ -23,6 +23,5 @@ if [ -z "$SYSTEMINITDAEMON" ]; then
 else
   echo "Init system discovered: $SYSTEMINITDAEMON"
   export SYSTEMINITDAEMON
-  exit 0
 fi
 
