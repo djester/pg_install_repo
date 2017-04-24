@@ -15,7 +15,7 @@ export repo
 
 echo Copy init-scripts:
 
-${repo}/tools/getinit.sh
+. ${repo}/tools/getinit.sh
 
 if [[ $SYSTEMINITDAEMON == "systemd" ]]; then
   echo -- PostgreSQL
