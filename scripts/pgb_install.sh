@@ -33,5 +33,11 @@ useradd -r -g postgres -s /bin/bash -d $PG_HOME/pgbouncer -m -k /etc/skel pgboun
 mkdir /data/pgbouncer /var/run/pgbouncer
 chown -R pgbouncer:postgres /var/run/pgbouncer
 
+# set PATH to profile enviroment
+cat > /etc/profile.d/pgbouncer.sh <<EOF
+export PATH=\$PATH:/opt/pgbouncer/bin
+export MANPATH=\$MANPATH:/opt/pgbouncer/share/man
+EOF
+
 exit 0
 
