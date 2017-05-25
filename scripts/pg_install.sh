@@ -45,6 +45,7 @@ fi
 cat > /etc/profile.d/postgresql.sh <<EOF
 export PATH=\$PATH:/opt/postgresql/bin
 export MANPATH=\$MANPATH:/opt/postgresql/share/man
+export LD_LIBRARY_PATH=/opt/postgresql/lib:\$LD_LIBRARY_PATH
 EOF
 
 exit 0
