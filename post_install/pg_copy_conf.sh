@@ -61,4 +61,11 @@ echo "-- lsyncd.conf"
 cp -f ${repo}/etc/lsyncd.conf /etc/lsyncd.conf || exit 1
 echo "-- pgbouncer.ini"
 cp -f ${repo}/etc/pgbouncer.ini ${TARGET_DIR}/pgbouncer/pgbouncer.ini && chown -R postgres:postgres /var/run/pgbouncer || exit 1
-
+echo "-- pager.sh"
+cp -f ${repo}/etc/pager.sh /etc/profile.d/pager.sh
+echo "-- psqlrc"
+mrdir -p /opt/postgresql/etc
+cp -f ${repo}/etc/psqlrc /opt/postgresql/etc/psqlrc
+echo "-- /data/bin"
+mkdir -p /data/bin
+cp -f ${repo}/bin/* /data/bin/
