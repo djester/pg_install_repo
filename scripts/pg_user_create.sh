@@ -1,5 +1,26 @@
 #!/bin/bash
 
+if [[ $1 == '--help' ]] || [[ $1 == '-h' ]] || [[ $1 == '/?' ]]; then
+
+  echo
+  echo HELP:
+  echo
+  echo --------------------------------------------------------
+  echo
+  echo " Use "
+  echo " ./pg_user_create.sh [db_target_path] [major_ver] "
+  echo " for create postgres user and database directories"
+  echo
+  echo " Example: ./pg_user_create.sh /data 9.6"
+  echo
+  echo " Use parameter --help or -h or /? for view this help"
+  echo
+  echo --------------------------------------------------------
+ 
+  exit 0
+
+fi
+
 TARGET_DIR  = ${TARGET_DIR:-$1}
 PG_REL      = ${PG_REL:-$2}
 PGDATA      = ${TARGET_DIR}/pgsql/${PG_REL}
