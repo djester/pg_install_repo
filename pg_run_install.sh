@@ -11,14 +11,22 @@ export repo
 
 # includes
 
-. ${repo}/config/pg_install.conf
+#. ${repo}/config/pg_install.conf
+
+TARGET_DIR=${TARGET_DIR:-$1}
+PG_VER=${PG_VER:-$2}
+PG_REL=${PG_VER%.*}
+
+echo $TARGET_DIR $PG_VER $PG_REL
+
+exit 0
 
 # install scripts
 
 ${repo}/scripts/libevent_install.sh && \
 ${repo}/scripts/tmux_install.sh 2.4 && . /etc/profile.d/tmux.sh && \
 ${repo}/scripts/pg_install.sh && \
-${repo}/scripts/pg_user_create.sh && \
+${repo}/scripts/pg_user_create.sh ${TARGET_DIR} ${PG_REL} && \
 ${repo}/scripts/pg_db_init.sh && \
  . /etc/profile.d/postgresql.sh && \
 ${repo}/scripts/pgb_install.sh 1.7.2 && \
