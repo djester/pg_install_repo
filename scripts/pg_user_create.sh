@@ -8,10 +8,10 @@ if [[ $1 == '--help' ]] || [[ $1 == '-h' ]] || [[ $1 == '/?' ]]; then
   echo --------------------------------------------------------
   echo
   echo " Use "
-  echo " ./pg_user_create.sh [db_target_path] [major_ver] "
+  echo " ./pg_user_create.sh [db_target_path] [major_ver] [postgres_user_home_path]"
   echo " for create postgres user and database directories"
   echo
-  echo " Example: ./pg_user_create.sh /data 9.6"
+  echo " Example: ./pg_user_create.sh /data 9.6 /data/home"
   echo
   echo " Use parameter --help or -h or /? for view this help"
   echo
@@ -21,13 +21,18 @@ if [[ $1 == '--help' ]] || [[ $1 == '-h' ]] || [[ $1 == '/?' ]]; then
 
 fi
 
-TARGET_DIR  = ${TARGET_DIR:-$1}
-PG_REL      = ${PG_REL:-$2}
-PGDATA      = ${TARGET_DIR}/pgsql/${PG_REL}
-PGLOG       = ${TARGET_DIR}/log/pgsql
-PGWAL       = ${TARGET_DIR}/pgwal
-PGARCH      = ${PGWAL}/archive
-PGWALBACKUP = ${PGWAL}/walbackup
+TARGET_DIR=${TARGET_DIR:-$1}
+PG_REL= ${PG_REL:-$2}
+PGDATA=${TARGET_DIR}/pgsql/${PG_REL}
+PGLOG=${TARGET_DIR}/log/pgsql
+PGWAL=${TARGET_DIR}/pgwal
+PGARCH=${PGWAL}/archive
+PGWALBACKUP=${PGWAL}/walbackup
+if [ -z "$3" ]; then
+    PG_HOME=${PG_HOME:-${TARGET_DIR}/home}
+else
+    PG_HOME=$3
+fi
 
 echo "Create group & user postgres"
 

@@ -38,20 +38,16 @@ if test $# -gt 0 ; then
 
     fi
 
-
     TARGET_DIR=${TARGET_DIR:-$1}
+    export TARGET_DIR
     PG_VER=${PG_VER:-$2}
     PG_REL=${PG_VER%.*}
-
-    echo $TARGET_DIR $PG_VER $PG_REL
-    echo $# $@
-    exit 0
 
     # install scripts
 
     ${repo}/scripts/libevent_install.sh && \
     ${repo}/scripts/tmux_install.sh 2.4 && . /etc/profile.d/tmux.sh && \
-    ${repo}/scripts/pg_install.sh && \
+    ${repo}/scripts/pg_install.sh ${PG_VER} && \
     ${repo}/scripts/pg_user_create.sh ${TARGET_DIR} ${PG_REL} && \
     ${repo}/scripts/pg_db_init.sh && \
      . /etc/profile.d/postgresql.sh && \
