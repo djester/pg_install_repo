@@ -22,7 +22,7 @@ if [[ $1 == '--help' ]] || [[ $1 == '-h' ]] || [[ $1 == '/?' ]]; then
 fi
 
 TARGET_DIR=${TARGET_DIR:-$1}
-PG_REL= ${PG_REL:-$2}
+PG_REL=${PG_REL:-$2}
 PGDATA=${TARGET_DIR}/pgsql/${PG_REL}
 PGLOG=${TARGET_DIR}/log/pgsql
 PGWAL=${TARGET_DIR}/pgwal
