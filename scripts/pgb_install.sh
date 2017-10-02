@@ -2,19 +2,19 @@
 
 mkdir -p /opt/src && cd /opt/src 
 
-# . ../config/pg_install.conf 
 # libevent must install before
 [ -d /opt/libevent ] || ( echo "ERROR: libevent must install before!!!" >&2; exit 1 ) 
 
 # asquire version from command-line parameter or pre-defined variable
-pgb_ver=${pgb_ver:-$1}
-[ "${pgb_ver}" ] || { echo "ERROR: Varible pgb_ver is not defined!" >&2; exit 1; }
+TARGET_DIR=${TARGET_DIR:-$1}
+PGB_VER=${PGB_VER:-$2}
+[ "${PGB_VER}" ] || { echo "ERROR: Varible PGB_VER is not defined!" >&2; exit 1; }
 
 # download sources
-pgb_name=pgbouncer-$pgb_ver
+pgb_name=pgbouncer-$PGB_VER
 pgb_nametar=${pgb_name}.tar.gz
 if [ ! -f $pgb_nametar ]; then
-    wget -c https://pgbouncer.github.io/downloads/files/$pgb_ver/$pgb_nametar || exit 1
+    wget -c https://pgbouncer.github.io/downloads/files/$PGB_VER/$pgb_nametar || exit 1
 fi
 
 # unpack sources and build software 
@@ -27,7 +27,7 @@ cd $pgb_name &&
 ) || exit 1
 
 #create user and set permissions
-[ "$PG_HOME" ] || PG_HOME=/data
+PG_HOME=${PG_HOME:-${TARGET_DIR}/home}
 [ -d $PG_HOME ] || mkdir -p $PG_HOME || exit 1
 useradd -r -g postgres -s /bin/bash -d $PG_HOME/pgbouncer -m -k /etc/skel pgbouncer || exit 1
 mkdir /data/pgbouncer /var/run/pgbouncer

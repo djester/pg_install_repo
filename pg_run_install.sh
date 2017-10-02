@@ -4,16 +4,6 @@
 # Be carreful!!! libevent is dependency for tmux and pgbouncer
 #
 
-# set root for git repository
-
-repo=$(readlink -f $0); repo=${repo%/*}
-export repo
-
-# includes
-
-. ${repo}/config/pg_install.conf
-
-# init variables
 
 if test $# -gt 0 ; then 
 
@@ -38,20 +28,35 @@ if test $# -gt 0 ; then
 
     fi
 
-    TARGET_DIR=${TARGET_DIR:-$1}
+    # set root for git repository
+
+    repo=$(readlink -f $0); repo=${repo%/*}
+    export repo
+
+    # includes off
+    # . ${repo}/config/pg_install.conf
+
+    # init variables
+
+    TARGET_DIR=$1
     export TARGET_DIR
-    PG_VER=${PG_VER:-$2}
+    PG_VER=$2
     PG_REL=${PG_VER%.*}
+    PG_DATA=${TARGET_DIR}/pgsql/${PG_REL}
+    PG_LC=ru_RU.UTF-8
+
+    TMUX_VER=2.4
+    PGB_VER=1.7.2
 
     # install scripts
 
     ${repo}/scripts/libevent_install.sh && \
-    ${repo}/scripts/tmux_install.sh 2.4 && . /etc/profile.d/tmux.sh && \
+    ${repo}/scripts/tmux_install.sh ${TMUX_VER} && . /etc/profile.d/tmux.sh && \
     ${repo}/scripts/pg_install.sh ${PG_VER} && \
     ${repo}/scripts/pg_user_create.sh ${TARGET_DIR} ${PG_REL} && \
-    ${repo}/scripts/pg_db_init.sh && \
+    ${repo}/scripts/pg_db_init.sh ${PGDATA} ${PG_LC} && \
      . /etc/profile.d/postgresql.sh && \
-    ${repo}/scripts/pgb_install.sh 1.7.2 && \
+    ${repo}/scripts/pgb_install.sh ${TARGET_DIR} ${PGB_VER} && \
     ${repo}/scripts/lsyncd_install.sh
 
 else
