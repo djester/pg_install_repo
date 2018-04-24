@@ -61,8 +61,8 @@ if test $# -gt 0 ; then
         LIB_EVENT_INST="YES"
     fi
 
-    TMUX_VER=2.4
-    PGB_VER=1.7.2
+    TMUX_VER=2.7
+    PGB_VER=1.8.1
 
     # install scripts
 
