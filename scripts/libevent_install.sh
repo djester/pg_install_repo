@@ -3,13 +3,13 @@ mkdir -p /opt/src
 #Dependences
 yum -y install ncurses-devel || exit 1
 
-#libevent 2.0.x
+#libevent 2.1.x
 cd /opt/src
 
 yum -y remove libevent libevent-devel libevent-headers || exit 1
 
-libevent_ver=2.0
-libevent_ver_full=${libevent_ver}.22-stable
+libevent_ver=2.1
+libevent_ver_full=${libevent_ver}.8-stable
 libevent_name1=libevent-${libevent_ver_full}
 libevent_nametar=${libevent_name1}.tar.gz
 
