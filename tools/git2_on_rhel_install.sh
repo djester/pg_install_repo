@@ -3,7 +3,7 @@
 # install Git on RHEL
 
 yum -y remove git
-yum -y install curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker asciidoc xmlto
+yum -y install nss curl libcurl curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker asciidoc xmlto
 
 export GIT_VER=$1
 cd /opt/src && wget https://www.kernel.org/pub/software/scm/git/git-${GIT_VER}.tar.gz && tar xzf git-${GIT_VER}.tar.gz && cd /opt/src/git-${GIT_VER} || exit 1
