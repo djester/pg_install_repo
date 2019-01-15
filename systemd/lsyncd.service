@@ -1,11 +1,14 @@
 [Unit]
-Description=synchronization daemon
+Description=Live Syncing (Mirror) Daemon
 After=network.target postgresql.service
 
 [Service]
+Restart=always
 Type=simple
+Nice=19
 PIDFile=/run/lsyncd.pid
-ExecStart=/usr/bin/lsyncd -pidfile /run/lsyncd.pid /etc/lsyncd/lsyncd.conf.lua
+ExecStart=/usr/bin/lsyncd -nodaemon -pidfile /run/lsyncd.pid /etc/lsyncd.conf
+ExecReload=/bin/kill -HUP $MAINPID
 
 [Install]
 WantedBy=multi-user.target
