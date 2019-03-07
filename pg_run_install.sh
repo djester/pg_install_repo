@@ -72,7 +72,7 @@ if test $# -gt 0 ; then
     ${repo}/scripts/pg_user_create.sh ${TARGET_DIR} ${PG_REL} && \
     ${repo}/scripts/pg_db_init.sh ${PG_DATA} ${PG_LC} && \
      . /etc/profile.d/postgresql.sh && \
-    ${repo}/scripts/pgb_install.sh ${TARGET_DIR} ${PGB_VER} && \
+    ${repo}/scripts/pgb_install.sh ${PGB_VER} && \
     ${repo}/scripts/lsyncd_install.sh
 
 else

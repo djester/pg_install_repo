@@ -6,8 +6,7 @@ mkdir -p /opt/src && cd /opt/src
 [ -d /opt/libevent ] || ( echo "ERROR: libevent must install before!!!" >&2; exit 1 ) 
 
 # asquire version from command-line parameter or pre-defined variable
-TARGET_DIR=${TARGET_DIR:-$1}
-PGB_VER=${PGB_VER:-$2}
+PGB_VER=${PGB_VER:-$1}
 [ "${PGB_VER}" ] || { echo "ERROR: Varible PGB_VER is not defined!" >&2; exit 1; }
 
 PGB_NAME=pgbouncer-${PGB_VER}
@@ -44,13 +43,8 @@ else
   ln -s ${PGB_PATH} ${PGB_SLINK}  || exit 1
 fi
 
-
-# create user and set permissions
-PG_HOME=${PG_HOME:-${TARGET_DIR}/home}
-[ -d ${PG_HOME} ] || mkdir -p ${PG_HOME} || exit 1
-#useradd -r -g postgres -s /bin/bash -d $PG_HOME/pgbouncer -m -k /etc/skel pgbouncer || exit 1
+# create directory and set permissions
 mkdir /data/pgbouncer /var/run/pgbouncer
-#chown -R pgbouncer:postgres /var/run/pgbouncer
 chown -R postgres:postgres /var/run/pgbouncer
 
 # set PATH to profile enviroment
