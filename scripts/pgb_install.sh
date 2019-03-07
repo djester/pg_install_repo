@@ -10,25 +10,44 @@ TARGET_DIR=${TARGET_DIR:-$1}
 PGB_VER=${PGB_VER:-$2}
 [ "${PGB_VER}" ] || { echo "ERROR: Varible PGB_VER is not defined!" >&2; exit 1; }
 
+PGB_NAME=pgbouncer-${PGB_VER}
+PGB_TAR=${PGB_NAME}.tar.gz
+PGB_PATH=/opt/${PGB_NAME}
+PGB_SLINK=/opt/pgbouncer
+PGB_URL=https://pgbouncer.github.io/downloads/files/${PGB_VER}/${PGB_TAR}
+
+if [ -e ${PGB_PATH} ]; then
+  echo "${PGB_PATH} exists. May be pgbouncer ${PGB_VER} software was installed before..."
+  exit 1
+fi
+
 # download sources
-pgb_name=pgbouncer-$PGB_VER
-pgb_nametar=${pgb_name}.tar.gz
-if [ ! -f $pgb_nametar ]; then
-    wget -c https://pgbouncer.github.io/downloads/files/$PGB_VER/$pgb_nametar || exit 1
+if [ ! -f ${PGB_TAR} ]; then
+    wget -c ${PGB_URL} || exit 1
 fi
 
 # unpack sources and build software 
-tar -zxf $pgb_nametar && 
+tar -zxf ${PGB_TAR} && 
 (
-cd $pgb_name &&
-    ./configure --prefix=/opt/$pgb_name --with-libevent=/opt/libevent && \
-    make && ( [ `id -un` = "root" ] && make install || sudo make install ) && \
-    ( [ -h /opt/pgbouncer ] || ln -s /opt/$pgb_name /opt/pgbouncer )
+cd ${PGB_NAME} &&
+    ./configure --prefix=${PGB_PATH} --with-libevent=/opt/libevent && \
+    make && ( [ `id -un` = "root" ] && make install || sudo make install ) 
 ) || exit 1
 
-#create user and set permissions
-#PG_HOME=${PG_HOME:-${TARGET_DIR}/home}
-#[ -d $PG_HOME ] || mkdir -p $PG_HOME || exit 1
+if [ -e ${PGB_SLINK} ];
+then
+  echo "${PGB_SLINK}  exists. May be PostgreSQL software was installed before..."
+  ls -lh ${PGB_SLINK}
+  echo "If you want upgrade software, relink it to ${PGB_NAME}"
+  exit 1
+else
+  ln -s ${PGB_PATH} ${PGB_SLINK}  || exit 1
+fi
+
+
+# create user and set permissions
+PG_HOME=${PG_HOME:-${TARGET_DIR}/home}
+[ -d ${PG_HOME} ] || mkdir -p ${PG_HOME} || exit 1
 #useradd -r -g postgres -s /bin/bash -d $PG_HOME/pgbouncer -m -k /etc/skel pgbouncer || exit 1
 mkdir /data/pgbouncer /var/run/pgbouncer
 #chown -R pgbouncer:postgres /var/run/pgbouncer
