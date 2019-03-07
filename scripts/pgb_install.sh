@@ -27,11 +27,12 @@ cd $pgb_name &&
 ) || exit 1
 
 #create user and set permissions
-PG_HOME=${PG_HOME:-${TARGET_DIR}/home}
-[ -d $PG_HOME ] || mkdir -p $PG_HOME || exit 1
-useradd -r -g postgres -s /bin/bash -d $PG_HOME/pgbouncer -m -k /etc/skel pgbouncer || exit 1
+#PG_HOME=${PG_HOME:-${TARGET_DIR}/home}
+#[ -d $PG_HOME ] || mkdir -p $PG_HOME || exit 1
+#useradd -r -g postgres -s /bin/bash -d $PG_HOME/pgbouncer -m -k /etc/skel pgbouncer || exit 1
 mkdir /data/pgbouncer /var/run/pgbouncer
-chown -R pgbouncer:postgres /var/run/pgbouncer
+#chown -R pgbouncer:postgres /var/run/pgbouncer
+chown -R postgres:postgres /var/run/pgbouncer
 
 # set PATH to profile enviroment
 cat > /etc/profile.d/pgbouncer.sh <<EOF
