@@ -6,7 +6,7 @@ yum -y install ncurses-devel || exit 1
 #libevent 2.1.x
 cd /opt/src
 
-yum -y remove libevent libevent-devel libevent-headers || exit 1
+yum -y remove libevent2 libevent2-devel libevent2-doc libevent-headers || exit 1
 
 libevent_ver=2.1
 libevent_ver_full=${libevent_ver}.8-stable
