@@ -45,7 +45,7 @@ if test $# -gt 0 ; then
 
 	PG_REL=${PG_VER%.*}
 	PGSQL=${TARGET_DIR}/pgsql
-	PG_DATA=${TARGET_DIR}/pgsql/${PG_REL}
+	PGDATA=${TARGET_DIR}/pgsql/${PG_REL}
 
 	echo Copy init-scripts:
 
