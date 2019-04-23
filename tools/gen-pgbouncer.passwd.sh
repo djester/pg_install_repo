@@ -41,7 +41,16 @@ else
 fi
 touch ${PGB_PWD} || { echo "ERROR: cannot create file ${PGB_PWD} !" >&2 ; exit 1; }
 
-for rn in $(psql -U postgres -qAtX -c "select rolname from pg_roles where not rolsuper and not rolreplication and rolcanlogin and not rolcatupdate")
+PG_VER=$(psql -U postgres -qAtX -c "select version()" | awk '{ print $ 2 }')
+PG_REL=${PG_VER%.*}
+
+if [[ "${PG_REL}" == "10" ]]; then
+    ROL_SQL="select rolname from pg_roles where not rolsuper and not rolreplication and rolcanlogin and not rolcatupdate"
+else
+    ROL_SQL="select rolname from pg_roles where not rolsuper and not rolreplication and rolcanlogin"
+fi
+
+for rn in $(psql -U postgres -qAtX -c "${ROL_SQL}")
 do
     psql -U postgres -qAtX postgres -c "select '\"'||usename||'\" '||'\"'||passwd||'\"' from pg_shadow where usename='$rn'" >> $PGB_PWD
 done
