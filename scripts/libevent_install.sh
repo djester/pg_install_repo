@@ -9,7 +9,7 @@ cd /opt/src
 yum -y remove libevent2 libevent2-devel libevent2-doc libevent-headers || exit 1
 
 libevent_ver=2.1
-libevent_ver_full=${libevent_ver}.8-stable
+libevent_ver_full=${libevent_ver}.11-stable
 libevent_name1=libevent-${libevent_ver_full}
 libevent_nametar=${libevent_name1}.tar.gz
 
