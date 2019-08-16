@@ -70,6 +70,11 @@ EOF
 ```
 
 # Create DB copy for standby
+On primary server
+```
+createuser -U postgres -SDR --replication replica
+```
+On replica server
 ```
 pg_basebackup -D ${PGDATA} -Xf -P -h ${PG_MASTER_HOST} -U replica
 ```
