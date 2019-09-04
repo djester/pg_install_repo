@@ -62,7 +62,7 @@ if test $# -gt 0 ; then
     fi
 
     TMUX_VER=2.9
-    PGB_VER=1.10.0
+    PGB_VER=1.11.0
 
     # install scripts
 
