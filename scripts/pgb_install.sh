@@ -5,6 +5,9 @@ mkdir -p /opt/src && cd /opt/src
 # libevent must install before
 [ -d /opt/libevent ] || ( echo "ERROR: libevent must install before!!!" >&2; exit 1 ) 
 
+# install c-ares library as denendence
+yum -y install c-ares c-ares-devel
+
 # asquire version from command-line parameter or pre-defined variable
 PGB_VER=${PGB_VER:-$1}
 [ "${PGB_VER}" ] || { echo "ERROR: Varible PGB_VER is not defined!" >&2; exit 1; }
@@ -29,7 +32,10 @@ fi
 tar -zxf ${PGB_TAR} && 
 (
 cd ${PGB_NAME} &&
-    ./configure --prefix=${PGB_PATH} --with-libevent=/opt/libevent && \
+    git submodule init && \
+    git submodule update && \
+    ./autogen.sh && \
+    ./configure --prefix=${PGB_PATH} --with-libevent=/opt/libevent --with-cares && \
     make && ( [ `id -un` = "root" ] && make install || sudo make install ) 
 ) || exit 1
 
