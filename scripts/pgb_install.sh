@@ -32,9 +32,6 @@ fi
 tar -zxf ${PGB_TAR} && 
 (
 cd ${PGB_NAME} &&
-    git submodule init && \
-    git submodule update && \
-    ./autogen.sh && \
     ./configure --prefix=${PGB_PATH} --with-libevent=/opt/libevent --with-cares && \
     make && ( [ `id -un` = "root" ] && make install || sudo make install ) 
 ) || exit 1
