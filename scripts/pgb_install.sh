@@ -28,11 +28,21 @@ git clone https://github.com/pgbouncer/pgbouncer.git
 cd pgbouncer/
 git checkout tags/$PGB_GIT_TAG
 
+<<<<<<< HEAD
+# unpack sources and build software 
+tar -zxf ${PGB_TAR} && 
+(
+cd ${PGB_NAME} &&
+    ./configure --prefix=${PGB_PATH} --with-libevent=/opt/libevent --with-cares && \
+    make && ( [ `id -un` = "root" ] && make install || sudo make install ) 
+) || exit 1
+=======
 git submodule init && \
 git submodule update && \
 ./autogen.sh && \
 ./configure --prefix=${PGB_PATH} --with-libevent=/opt/libevent --with-cares && \
 make && ( [ `id -un` = "root" ] && make install || sudo make install ) 
+>>>>>>> 23727984af5dc09789ba20e02ba96a9919d39a04
 
 if [ -e ${PGB_SLINK} ];
 then
