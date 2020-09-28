@@ -30,7 +30,7 @@ fi
 
 tar -zxf ${PG_TAR} && \
 cd ${PG_NAME} && \
-./configure --prefix=${PG_PATH} with_libxml=yes with_libxslt=yes && \
+./configure --prefix=${PG_PATH} with_libxml=yes with_libxslt=yes --with-system-tzdata=/usr/share/zoneinfo && \
 make world -j6 && [ `id -un` = "root" ] && \
 make install-world || sudo make install-world || exit 1
 
